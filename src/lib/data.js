@@ -1,50 +1,46 @@
-// Temp Data
-const users = [
-  {
-    id: 1,
-    name: "Siar",
-  },
-  {
-    id: 2,
-    name: "Franky",
-  },
-];
-
-const posts = [
-  {
-    id: 1,
-    title: "Post 1",
-    body: "Post from user 1",
-    userId: 1,
-  },
-  {
-    id: 2,
-    title: "Post 2",
-    body: "Post from user 2",
-    userId: 2,
-  },
-  {
-    id: 3,
-    title: "Post 3",
-    body: "Post from user 1",
-    userId: 1,
-  },
-  {
-    id: 4,
-    title: "Post 4",
-    body: "Post from user 1",
-    userId: 1,
-  },
-];
+import { Post, User } from "./models";
+import { connectToDb } from "./utils";
 
 export const getPosts = async () => {
-  return posts;
+  try {
+    connectToDb();
+    const posts = await Post.find();
+    return posts;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Failed to fetch posts: ${error}`);
+  }
 };
 
-export const getPost = async (id) => {
-  return posts.find((post) => post.id === parseInt(id));
+export const getPost = async (slug) => {
+  try {
+    connectToDb();
+    const post = await Post.findOne({ slug });
+    return post;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch post: ${error}`);
+  }
 };
 
 export const getUser = async (id) => {
-  return users.find((user) => user.id === parseInt(id));
+  try {
+    connectToDb();
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch user: ${error}`);
+  }
+};
+
+export const getUsers = async () => {
+  try {
+    connectToDb();
+    const users = await User.find();
+    return users;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch users: ${error}`);
+  }
 };
