@@ -1,5 +1,30 @@
+import Image from "next/image";
 import styles from "./adminUsers.module.css";
+import { deleteUser } from "@/lib/actions";
+import { getUsers } from "@/lib/data";
 
-export const AdminUsers = () => {
-  return <div className={styles.container}>AdminUsers</div>;
+export const AdminUsers = async () => {
+  const users = await getUsers();
+  return (
+    <div className={styles.container}>
+      <h1>Users</h1>
+      {users.map((user) => (
+        <div className={styles.user} key={user.id}>
+          <div className={styles.detail}>
+            <Image
+              src={user.img || "/noAvatar.png"}
+              alt="avatar"
+              width={50}
+              height={50}
+            />
+            <span>{user.username}</span>
+          </div>
+          <form action={deleteUser}>
+            <input type="hidden" name="id" value={user.id} />
+            <button className={styles.postButton}>Delete</button>
+          </form>
+        </div>
+      ))}
+    </div>
+  );
 };
